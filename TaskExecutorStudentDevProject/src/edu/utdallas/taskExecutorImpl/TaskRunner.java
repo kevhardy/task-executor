@@ -7,9 +7,10 @@ public class TaskRunner implements Runnable {
 	private BlockingQueue queue;
 
 	public TaskRunner() {
-		
+		// Empty default constructor (Not needed but preferred over implicit)
 	}
 	
+	// Sets the task runner's queue it retrieves tasks from
 	public void setBlockingQueue(BlockingQueue queue) {
 		
 		this.queue = queue;
@@ -18,9 +19,10 @@ public class TaskRunner implements Runnable {
 	@Override
 	public void run() {
 		
+		// Will forever try to receive tasks from the queue unless blocked
 		while(true) {
 			try {
-				Task newTask = queue.take();
+				Task newTask = queue.take(); // take() blocks if queue is empty
 				newTask.execute();
 			}
 			catch(Exception e) {

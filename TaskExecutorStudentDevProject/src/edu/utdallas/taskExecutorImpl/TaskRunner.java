@@ -1,7 +1,5 @@
 package edu.utdallas.taskExecutorImpl;
 
-import edu.utdallas.taskExecutor.Task;
-
 public class TaskRunner implements Runnable {
 	
 	private BlockingQueue queue;
@@ -22,8 +20,7 @@ public class TaskRunner implements Runnable {
 		// Will forever try to receive tasks from the queue unless blocked
 		while(true) {
 			try {
-				Task newTask = queue.take(); // take() blocks if queue is empty
-				newTask.execute();
+				queue.take().execute(); // take() blocks if queue is empty
 			}
 			catch(Exception e) {
 				System.out.println(e);

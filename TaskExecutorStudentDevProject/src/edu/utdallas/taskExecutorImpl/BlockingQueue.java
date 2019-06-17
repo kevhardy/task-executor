@@ -28,10 +28,13 @@ public class BlockingQueue {
 		
 		// Inserts task into the queue and notifies notEmpty monitor
 		synchronized (notEmpty) {
-			buffer[nextIn] = task;
-			nextIn = (nextIn + 1) % buffer.length;
-			count++;
-			notEmpty.notify();
+			try {
+				buffer[nextIn] = task;
+				nextIn = (nextIn + 1) % buffer.length;
+				count++;
+			} finally {
+				notEmpty.notify();
+			}
 		}
 	}
 	
@@ -47,11 +50,14 @@ public class BlockingQueue {
 
 		// Removes and returns task from queue and notifies notFull monitor
 		synchronized (notFull) {
-			Task result = buffer[nextOut];
-			nextOut = (nextOut + 1 ) % buffer.length;
-			count--;
-			notFull.notify();
-			return result;
+			try {
+				Task result = buffer[nextOut];
+				nextOut = (nextOut + 1 ) % buffer.length;
+				count--;
+				return result;
+			} finally {
+				notFull.notify();
+			}
 		}	
 	}
 
